@@ -1,16 +1,16 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <iterator>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 using namespace std;
 
-class Arrays {
+class Solution {
   // https://www.techinterviewhandbook.org/algorithms/array/
 public:
-  Arrays() {}
   vector<int> twoSum(vector<int> &nums, int target) {
     // https://leetcode.com/problems/two-sum/
     unordered_map<int, int> walked;
@@ -95,6 +95,31 @@ public:
       }
     }
     return false;
+  }
+  int maxProduct(vector<int> &nums) {
+    // https://leetcode.com/problems/maximum-product-subarray/description/
+
+    // Subarray with largest product
+    int maxP = INT_MIN;
+    int product = 1;
+
+    // Left traversal, Right traversal
+    for (auto n = nums.begin(); n != nums.end(); n++) {
+      product *= *n;
+      maxP = max(maxP, product);
+      if (product == 0) {
+        product = 1;
+      }
+    }
+    product = 1;
+    for (auto n = nums.end() - 1; n != nums.begin(); n--) {
+      product *= *n;
+      maxP = max(maxP, product);
+      if (product == 0) {
+        product = 1;
+      }
+    }
+    return maxP;
   }
 
   vector<int> absSort(const vector<int> &arr) {
