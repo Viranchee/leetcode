@@ -101,24 +101,16 @@ public:
 
     // Subarray with largest product
     int maxP = INT_MIN;
-    int product = 1;
+    int pr = 1, su = 1;
+    int N = nums.size();
+    for (int i = 0; i < N; i++) {
+      pr *= nums[i];
+      su *= nums[N - 1 - i];
+      maxP = max({maxP, pr, su});
+      pr = pr != 0 ? pr : 1;
+      su = su != 0 ? su : 1;
+    }
 
-    // Left traversal, Right traversal
-    for (auto n = nums.begin(); n != nums.end(); n++) {
-      product *= *n;
-      maxP = max(maxP, product);
-      if (product == 0) {
-        product = 1;
-      }
-    }
-    product = 1;
-    for (auto n = nums.end() - 1; n != nums.begin(); n--) {
-      product *= *n;
-      maxP = max(maxP, product);
-      if (product == 0) {
-        product = 1;
-      }
-    }
     return maxP;
   }
 
