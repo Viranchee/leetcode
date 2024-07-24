@@ -50,24 +50,33 @@ public:
     // Use division: Tradeoff: Hardware is slow
     vector<int> out(nums.size(), 1);
 
-    // Left pass
-    {
-      int running = 1;
-      for (int i = 0; i < nums.size(); i++) {
-        out[i] *= running;
-        running *= nums[i];
-      }
-    }
+    // // Left pass
+    // {
+    //   int running = 1;
+    //   for (int i = 0; i < nums.size(); i++) {
+    //     out[i] *= running;
+    //     running *= nums[i];
+    //   }
+    // }
 
-    // Right pass
-    {
-      int running = 1;
-      for (int i = nums.size() - 1; i >= 0; i--) {
-        out[i] *= running;
-        running *= nums[i];
-      }
+    // // Right pass
+    // {
+    //   int running = 1;
+    //   for (int i = nums.size() - 1; i >= 0; i--) {
+    //     out[i] *= running;
+    //     running *= nums[i];
+    //   }
+    // }
+    // Combined pass
+    int prefix = 1, suffix = 1;
+    int N = nums.size();
+    for (int i = 0; i < N; i++) {
+      int rI = N - i - 1;
+      out[i] *= prefix;
+      out[rI] *= suffix;
+      prefix *= nums[i];
+      suffix *= nums[rI];
     }
-
     return out;
   }
 
