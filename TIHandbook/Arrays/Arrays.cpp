@@ -82,6 +82,25 @@ public:
     return out;
   }
 
+  int trap(vector<int> &height) {
+    int sum = 0;
+    auto l = height.begin(), r = height.end() - 1;
+    int lMax = 0, rMax = 0;
+    while (l < r) {
+      lMax = max(lMax, *l);
+      rMax = max(rMax, *r);
+
+      if (lMax < rMax) {
+        sum += lMax - *l;
+        l++;
+      } else {
+        sum += rMax - *r;
+        r--;
+      }
+    }
+    return sum;
+  }
+
   int maxSubArray(vector<int> &nums) {
     // https://leetcode.com/problems/maximum-subarray/
     // Kadane's algorithm
@@ -151,6 +170,38 @@ public:
 
     return -1;
   }
+
+  vector<vector<int>> threeSum(vector<int> &nums) {
+    // https://leetcode.com/problems/3sum/
+    sort(nums.begin(), nums.end());
+
+    vector<vector<int>> o;
+    for (auto it = nums.begin(); it != nums.end(); it++) {
+      int target = 0 - *it;
+      auto l = it + 1, r = nums.end() - 1;
+      while (l < r) {
+        int sum = *l + *r;
+        if (sum < target) {
+          l++;
+        } else if (sum > target) {
+          r--;
+        } else if (sum == target) {
+          o.push_back({*it, *l, *r});
+          while (l < r && *l == *(l + 1))
+            l++;
+          while (l < r && *r == *(r - 1))
+            r--;
+          l++;
+          r--;
+        }
+      }
+      while (it + 1 != nums.end() && *it == *(it + 1))
+        it++;
+    }
+    return o;
+  }
+
+  // int maxArea(vector<int> &height) {}
 
   vector<int> absSort(const vector<int> &arr) {
     // Found on Pramp, not on leetcode
