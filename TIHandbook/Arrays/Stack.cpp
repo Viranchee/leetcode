@@ -52,7 +52,79 @@ public:
     return eval;
   }
 
-  vector<string> generateParenthesis(int n) { return {}; }
+private:
+  void dfs_generateParenthesis(int open, int close, string s, int n,
+                               vector<string> &res) {
+    if (open == close == n) {
+      res.push_back(s);
+      return;
+    }
+    if (open < n) {
+      dfs_generateParenthesis(open + 1, close, s + "(", n, res);
+    }
+    if (close < n) {
+      dfs_generateParenthesis(open, close + 1, s + ")", n, res);
+    }
+  }
+
+public:
+  vector<string> generateParenthesis(int n) {
+    vector<string> res;
+    dfs_generateParenthesis(0, 0, "", n, res);
+    return res;
+  }
+
+  vector<int> dailyTemperatures(vector<int> &temperatures) {
+    stack<int> lowTi;
+    // for (int i = 0; i < temperatures.size(); i++) {
+    //   while (!lowTi.empty() && temperatures[i] > temperatures[lowTi.top()]) {
+    //     temperatures[lowTi.top()] = i - lowTi.top();
+    //     lowTi.pop();
+    //   }
+    //   lowTi.push(i);
+    // }
+    // while (!lowTi.empty()) {
+    //   temperatures[lowTi.top()] = 0;
+    //   lowTi.pop();
+    // }
+
+    for (auto it = temperatures.begin(); it != temperatures.end(); it++) {
+      while (!lowTi.empty() && *it > temperatures[lowTi.top()]) {
+        temperatures[lowTi.top()] =
+            distance(temperatures.begin(), it) - lowTi.top();
+        lowTi.pop();
+      }
+      lowTi.push(distance(temperatures.begin(), it));
+    }
+    while (!lowTi.empty()) {
+      temperatures[lowTi.top()] = 0;
+      lowTi.pop();
+    }
+
+    return temperatures;
+  }
+
+  int carFleet(int target, vector<int> &position, vector<int> &speed) {
+    struct Car {
+      int pos;
+      float time;
+      bool operator>(const Car &c) const { return pos > c.pos; }
+      // bool operator<(const Car &c) const { return pos < c.pos; }
+      // bool operator==(const Car &c) const { return pos == c.pos; }
+    };
+    vector<Car> cars;
+    for (int i = 0; i < position.size(); i++) {
+      cars.push_back(
+          {position[i], (float)(target - position[i]) / (float)speed[i]});
+    }
+    sort(cars.begin(), cars.end(), greater<Car>());
+    stack<float> fleet;
+    for (auto car : cars) {
+      while (!fleet.empty() && car.time >= fleet.top())
+        fleet.pop();
+      fleet.push(car.time);
+    }
+  }
 };
 
 #include <stdexcept>
