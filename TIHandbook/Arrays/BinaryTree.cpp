@@ -13,14 +13,12 @@ struct TreeNode {
       : val(x), left(left), right(right) {}
 };
 class Solution {
-private:
-  int result = 0;
-
 public:
   int diameterOfBinaryTree(TreeNode *root) {
+    int result = 0;
     if (root) {
       // capture result by reference
-      auto dfs = [this](auto &self, TreeNode *node) {
+      auto dfs = [result](auto &self, TreeNode *node) mutable {
         if (!node)
           return 0;
         int left = self(self, node->left);
@@ -34,5 +32,23 @@ public:
     return result;
   }
 
-  bool isBalanced(TreeNode *root) {}
+  bool isBalanced(TreeNode *root) {
+    function<int(TreeNode *)> dfs = [&dfs](auto node) mutable {
+      if (!node)
+        return 0;
+      int left = dfs(node->left);
+      int right = dfs(node->right);
+      if (abs(left - right) > 1 || left == -1 || right == -1)
+        return -1;
+      return 1 + max(left, right);
+    };
+    return dfs(root) != -1;
+  }
+
+  bool isSameTree(TreeNode *p, TreeNode *q) {
+    if (!p || !q)
+      return p == q;
+    return p->val == q->val && isSameTree(p->left, q->left) &&
+           isSameTree(p->right, q->right);
+  }
 };
