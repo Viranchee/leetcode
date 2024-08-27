@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -41,13 +42,14 @@ public:
       }
       node = node->children[index].get();
     }
-    if (node->children[26] == nullptr)
-      node->children[26] = make_unique<Node>();
   }
 
-  bool search(string word) {}
+  bool search(string word) {
+    Node *node = searchPrefix(word);
+    return node != nullptr && node->isTerminal;
+  }
 
-  bool startsWith(string prefix) { return }
+  bool startsWith(string prefix) { return searchPrefix(prefix) != nullptr; }
 };
 
 /**
@@ -64,12 +66,16 @@ public:
  * obj->addWord(word);
  * bool param_2 = obj->search(word);
  */
+// Use STL and Algorithms
+
 class WordDictionary {
 private:
+  Trie trie;
+
 public:
   WordDictionary() {}
 
-  void addWord(string word) {}
+  void addWord(string word) { trie.insert(word); }
 
-  bool search(string word) {}
+  bool search(string word) { return trie.search(word); }
 };
