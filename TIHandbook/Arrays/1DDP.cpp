@@ -236,4 +236,16 @@ public:
     };
     return dp(coins, amount);
   }
+
+  int maxProduct(vector<int> &nums) {
+    int result = INT_MIN, maxProduct = 1, minProduct = 1;
+    for (int num : nums) {
+      if (num < 0)
+        swap(maxProduct, minProduct);
+      maxProduct = max(maxProduct * num, num);
+      minProduct = min(minProduct * num, num);
+      result = max(result, maxProduct);
+    }
+    return result;
+  }
 };
