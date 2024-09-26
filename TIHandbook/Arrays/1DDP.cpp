@@ -185,6 +185,39 @@ public:
   }
 
   int numDecodings(string s) {
-    //
+    function<int(string)> dp = [](string s) {
+      if (s[0] == '0')
+        return 0;
+      vector<int> dp(s.length() + 2, 0);
+      dp[0] = 1;
+      for (int i = 0; i < s.length(); i++) {
+        if (s[i] != '0') {
+          dp[i + 1] += dp[i];
+          if (i < s.length() - 1 &&
+              ((s[i] - '0') * 10 + s[i + 1] - '0') <= 26) {
+            dp[i + 2] += dp[i];
+          }
+        }
+      }
+      return dp[s.length()];
+    };
+
+    function<int(string &)> spaceOptimized = [](string &s) {
+      if (s[0] == '0')
+        return 0;
+      int prev = 1, curr = 1;
+      for (int i = 1; i < s.length(); i++) {
+        int temp = curr;
+        if (s[i] == '0')
+          curr = 0;
+        if (s[i - 1] == '1' || (s[i - 1] == '2' && s[i] <= '6'))
+          curr += prev;
+        prev = temp;
+      }
+      return curr;
+    };
+
+    // return dp(s);
+    return spaceOptimized(s);
   }
 };
