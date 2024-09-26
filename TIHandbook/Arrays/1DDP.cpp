@@ -3,6 +3,7 @@
 #include <climits>
 #include <functional>
 #include <iostream>
+#include <numeric>
 #include <queue>
 #include <regex>
 #include <string_view>
@@ -276,5 +277,29 @@ public:
       return *max_element(lis.begin(), lis.end());
     };
     return dp(nums);
+  }
+
+  bool canPartition(vector<int> &nums) {
+    function<bool(vector<int> &)> dp_fn = [](auto &nums) {
+      int sum = accumulate(nums.begin(), nums.end(), 0);
+      if ((sum & 1) == 1)
+        return false;
+      sum >>= 1;
+      unordered_set<int> dp = {0};
+      for (int num : nums) {
+        vector<int> temp;
+        temp.reserve(dp.size());
+        for (int i : dp) {
+          int total = i + num;
+          if (total == sum)
+            return true;
+          if (total <= sum)
+            temp.push_back(total);
+        }
+        dp.insert(temp.begin(), temp.end());
+      }
+      return false;
+    };
+    return dp_fn(nums);
   }
 };
