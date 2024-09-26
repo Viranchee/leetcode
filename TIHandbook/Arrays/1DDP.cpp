@@ -5,6 +5,7 @@
 #include <iostream>
 #include <queue>
 #include <regex>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -247,5 +248,19 @@ public:
       result = max(result, maxProduct);
     }
     return result;
+  }
+
+  bool wordBreak(string s, vector<string> &wordDict) {
+    auto sv = string_view(s);
+    vector<bool> dp(sv.length() + 1, false);
+    dp[sv.length()] = true;
+    for (int i = sv.length() - 1; i >= 0; i--) {
+      for (auto w = wordDict.begin(); w != wordDict.end(); w++) {
+        if (i + w->length() <= sv.length() && sv.substr(i, w->length()) == *w) {
+          dp[i] = dp[i] || dp[i + w->length()];
+        }
+      }
+    }
+    return dp[0];
   }
 };
