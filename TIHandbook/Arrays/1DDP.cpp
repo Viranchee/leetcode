@@ -263,4 +263,18 @@ public:
     }
     return dp[0];
   }
+
+  int lengthOfLIS(vector<int> &nums) {
+    function<int(vector<int> &)> dp = [](auto nums) {
+      vector<int> lis(nums.size(), 1);
+      for (int i = nums.size() - 1; i >= 0; i--) {
+        for (int j = i + 1; j < nums.size(); j++) {
+          if (nums[i] < nums[j])
+            lis[i] = max(lis[i], 1 + lis[j]);
+        }
+      }
+      return *max_element(lis.begin(), lis.end());
+    };
+    return dp(nums);
+  }
 };
