@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <numeric>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
@@ -43,5 +44,22 @@ public:
       far = nextFar;
     }
     return jumps;
+  }
+
+  int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+    int tank = 0, start = 0;
+    int gasCostT = 0;
+    for (int i = 0; i < gas.size(); i++) {
+      int req = gas[i] - cost[i];
+      gasCostT += req;
+      tank += req;
+      if (tank < 0) {
+        tank = 0;
+        start = i + 1;
+      }
+    }
+    if (gasCostT < 0)
+      start = -1;
+    return start;
   }
 };
