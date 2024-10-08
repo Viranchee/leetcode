@@ -124,6 +124,34 @@ public:
         fleet.pop();
       fleet.push(car.time);
     }
+    return fleet.size();
+  }
+  int calculate(string s) {
+    s += '+';
+    stack<int> stk;
+    long long int ans = 0, curr = 0;
+    char sign = '+';
+
+    for (int i = 0; i < s.size(); i++) {
+      if (isdigit(s[i]))
+        curr = curr * 10 + (s[i] - '0');
+      else if (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/') {
+        if (sign == '+' || sign == '-') {
+          stk.push(curr * -(sign - ','));
+        } else if (sign == '*' || sign == '/') {
+          int val = ((sign - '*') ? stk.top() / curr : stk.top() * curr);
+          stk.pop();
+          stk.push(val);
+        }
+        curr = 0;
+        sign = s[i];
+      }
+    }
+    while (stk.size()) {
+      ans += stk.top();
+      stk.pop();
+    }
+    return ans;
   }
 };
 
