@@ -123,53 +123,21 @@ public:
   }
 
   bool checkValidString(string s) {
-    set<int> star_ind;
-    for (int i = 0; i < int(s.size()); i++) {
-      if (s[i] == '*')
-        star_ind.insert(i);
-    }
-    stack<pair<char, int>> st;
-    for (int i = 0; i < int(s.size()); i++) {
-      if (s[i] == '*')
-        continue;
-      if (!st.empty()) {
-        if (st.top().first == '(') {
-          if (s[i] == ')')
-            st.pop();
-          else
-            st.push({s[i], i});
-        } else {
-          st.push({s[i], i});
-        }
-      } else {
-        st.push({s[i], i});
-      }
-    }
+    // Greedy approach
+    int leftMin = 0, leftMax = 0;
+    for (char c : s) {
+      if (c == '(')
+        leftMin++, leftMax++;
+      else if (c == ')')
+        leftMin--, leftMax--;
+      else
+        leftMin--, leftMax++;
 
-    while (!st.empty() && (int(star_ind.size())) > 0) {
-      int idx = st.top().second;
-      char ch = st.top().first;
-      if (ch == '(') {
-        auto lb = star_ind.lower_bound(idx);
-        if (lb == star_ind.end())
-          break;
-        else {
-          st.pop();
-          star_ind.erase(lb);
-        }
-      } else {
-        auto lb = star_ind.lower_bound(idx);
-        if (lb == star_ind.begin()) {
-          break;
-        } else {
-          st.pop();
-          lb--;
-          star_ind.erase(lb);
-        }
-      }
+      if (leftMax < 0)
+        return false;
+      if (leftMin < 0)
+        leftMin = 0;
     }
-    if (st.empty())
-      return true;
-    return false;
+    return leftMin == 0;
   }
 };
