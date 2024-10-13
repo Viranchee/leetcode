@@ -2,6 +2,7 @@
 #include <cassert>
 #include <climits>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <iterator>
 #include <unordered_map>
@@ -216,5 +217,38 @@ public:
       }
     });
     return copy;
+  }
+};
+
+// Serialize and Deserialize a Matrix
+
+class MatrixStorage {
+public:
+  string filename;
+  void store(vector<vector<float>> matrix) {
+    int rows = matrix.size(), cols = matrix[0].size();
+    auto F = fstream(filename, ios::out);
+    F << rows << " " << cols << endl;
+    for (auto row : matrix) {
+      for (auto val : row) {
+        F << val << " ";
+      }
+      F << endl;
+    }
+    F.close();
+  }
+
+  vector<vector<float>> retrive() {
+    auto F = fstream(filename, ios::in);
+    int rows, cols;
+    F >> rows >> cols;
+    vector<vector<float>> matrix(rows, vector<float>(cols));
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        F >> matrix[i][j];
+      }
+    }
+    F.close();
+    return matrix;
   }
 };
