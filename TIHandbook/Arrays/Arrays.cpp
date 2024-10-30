@@ -253,3 +253,5 @@ public:
     return matrix;
   }
 };
+
+int arrays() { return 0; }

@@ -193,6 +193,7 @@ public:
     }
     cache.push_front({key, value});
     map[key] = cache.begin();
+    return value;
   }
 };
 

@@ -34,7 +34,8 @@ public:
   string longestCommonPrefix(vector<string> &words) {
     std::string commonPrefix = words[0];
     for (auto w : words) {
-      commonPrefix = std::mismatch(w.begin(), w.end(), commonPrefix.begin());
+      auto x = std::mismatch(w.begin(), w.end(), commonPrefix.begin());
+      commonPrefix = std::string(w.begin(), x.first);
     }
 
     return commonPrefix;

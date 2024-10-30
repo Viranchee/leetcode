@@ -102,7 +102,7 @@ public:
 
   void postTweet(int userId, int tweetId) {}
 
-  vector<int> getNewsFeed(int userId) {}
+  vector<int> getNewsFeed(int userId) { return {}; }
 
   void follow(int followerId, int followeeId) {}
 
