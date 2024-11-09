@@ -98,25 +98,17 @@ public:
 
   int largestRectangleArea(vector<int> heights) {
     int maxArea = 0;
-    struct Node {
-      int height, index;
-    };
-    stack<Node> stk;
-    for (int i = 0; i < heights.size(); i++) {
-      int start = i;
-      while (!stk.empty() && stk.top().height > heights[i]) {
-        Node node = stk.top();
+    stack<int> stk;
+
+    for (int i = 0; i <= heights.size(); i++) {
+      while (!stk.empty() &&
+             (i == heights.size() || heights[stk.top()] >= heights[i])) {
+        int height = heights[stk.top()];
         stk.pop();
-        maxArea = max(maxArea, node.height) * (i - node.index);
-        start = node.index;
+        int width = stk.empty() ? i : i - stk.top() - 1;
+        maxArea = max(maxArea, height * width);
       }
-      stk.push({heights[i], start});
-    }
-    while (!stk.empty()) {
-      Node node = stk.top();
-      stk.pop();
-      int calcArea = node.height * (heights.size() - node.index);
-      maxArea = max(maxArea, calcArea);
+      stk.push(i);
     }
     return maxArea;
   }
