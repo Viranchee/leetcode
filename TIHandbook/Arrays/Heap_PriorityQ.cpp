@@ -4,7 +4,9 @@
 #include <memory>
 #include <mutex>
 #include <queue>
+#include <stack>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 using namespace std;
@@ -92,6 +94,31 @@ public:
       idle -= min(chunk, f);
     }
     return tasks.size() + max(0, idle);
+  }
+
+  int largestRectangleArea(vector<int> heights) {
+    int maxArea = 0;
+    struct Node {
+      int height, index;
+    };
+    stack<Node> stk;
+    for (int i = 0; i < heights.size(); i++) {
+      int start = i;
+      while (!stk.empty() && stk.top().height > heights[i]) {
+        Node node = stk.top();
+        stk.pop();
+        maxArea = max(maxArea, node.height) * (i - node.index);
+        start = node.index;
+      }
+      stk.push({heights[i], start});
+    }
+    while (!stk.empty()) {
+      Node node = stk.top();
+      stk.pop();
+      int calcArea = node.height * (heights.size() - node.index);
+      maxArea = max(maxArea, calcArea);
+    }
+    return maxArea;
   }
 };
 
