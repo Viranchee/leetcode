@@ -43,6 +43,31 @@ public:
     return maxLen;
   }
 
+
+    string getShortestUniqueSubstring( const vector<char>& arr, const string &str ) {
+        unordered_map<char, int> counts;
+        unordered_map<char, int> visit;
+        for_each(arr.begin(), arr.end(), [&counts](auto c) {
+            counts[c]++;
+        });
+
+        auto l = str.begin(), r = str.begin();
+        auto smol = make_pair(str.end(), str.end());
+        int matched = 0;
+        const int TOMATCH = counts.size();
+
+        while (r < str.end()) {
+            matched += (++visit[*r] == counts[*r]);
+            while (l <= r && matched == TOMATCH) {
+                // update min window
+                if ((smol.second - smol.first) > (r - l))
+                    make_pair(l,r);
+                matched -= (--visit[*l] == counts[*l]);
+            }
+        }
+        return string(l,r);
+    }
+
   int characterReplacement(string s, int k) {
     // vector<int> freq(26, 0);
     unordered_map<char, int> freq;
