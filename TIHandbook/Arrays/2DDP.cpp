@@ -20,9 +20,9 @@ public:
       return 1;
     if (m < n)
       swap(m, n);
-    long long res = 1;
-    for (int i = 1, j = m; i < n; i++, j++) {
-      res = res * j / i;
+    long res = 1;
+    for (int i = 1; i < n; i++) {
+      res = res * m++ / i;
     }
     return res;
   }
