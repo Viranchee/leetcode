@@ -77,4 +77,30 @@ public:
     };
     return dp_fast(prices);
   }
+
+  int change(int amount, vector<int> &coins) {
+    vector<uint> memo(amount + 1, 0);
+    memo[0] = 1;
+    for (auto c = coins.crbegin(); c != coins.crend(); c++) {
+      for (int target = 1; target <= amount; target++)
+        if (target >= *c)
+          memo[target] += memo[target - *c];
+    }
+    return memo[amount];
+  }
+
+  int findTargetSumWays(vector<int> &nums, int target) {
+    unordered_map<int, int> memo;
+    memo[0] = 1;
+
+    for (const auto &num : nums) {
+      unordered_map<int, int> nextMemo;
+      for (const auto &[total, count] : memo) {
+        nextMemo[total + num] += count;
+        nextMemo[total - num] += count;
+      }
+      memo = nextMemo;
+    }
+    return memo[target];
+  }
 };
